@@ -1,0 +1,34 @@
+[project]
+name = "booking-platform"
+version = "0.1.0"
+description = "Booking platform: workspaces and events services"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "psycopg[binary]>=3.2",
+    "argon2-cffi>=23.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.7",
+    "mypy>=1.13",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true

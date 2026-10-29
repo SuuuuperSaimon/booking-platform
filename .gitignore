@@ -1,0 +1,28 @@
+# Секреты
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Окружение
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Кэши инструментов
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Локальные служебные файлы
+.idea/
+.vscode/
+.DS_Store
+*.log

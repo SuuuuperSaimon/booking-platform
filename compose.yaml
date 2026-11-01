@@ -1,0 +1,56 @@
+services:
+  workspaces:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${WORKSPACES_DB_NAME}
+      DB_USER: ${WORKSPACES_DB_USER}
+      DB_PASSWORD: ${WORKSPACES_DB_PASSWORD}
+    command: uv run --locked gunicorn --bind 0.0.0.0:8000 services.workspaces.app.wsgi:application
+    ports:
+      - "8001:8000"
+
+  events:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${EVENTS_DB_NAME}
+      DB_USER: ${EVENTS_DB_USER}
+      DB_PASSWORD: ${EVENTS_DB_PASSWORD}
+    command: uv run --locked gunicorn --bind 0.0.0.0:8000 services.events.app.wsgi:application
+    ports:
+      - "8002:8000"
+    
+
+  postgres:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
+      POSTGRES_DB: ${POSTGRES_DEFAULT_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+
+      WORKSPACES_DB_NAME: ${WORKSPACES_DB_NAME}
+      WORKSPACES_DB_USER: ${WORKSPACES_DB_USER}
+      WORKSPACES_DB_PASSWORD: ${WORKSPACES_DB_PASSWORD}
+
+      EVENTS_DB_NAME: ${EVENTS_DB_NAME}
+      EVENTS_DB_USER: ${EVENTS_DB_USER}
+      EVENTS_DB_PASSWORD: ${EVENTS_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  postgres_data:

@@ -1,0 +1,12 @@
+services:
+  workspaces:
+    volumes:
+      - ./services/workspaces:/app/services/workspaces:ro
+
+    command: uv run --locked gunicorn --reload --bind 0.0.0.0:8000 services.workspaces.app.wsgi:application
+
+  events:
+    volumes:
+      - ./services/events:/app/services/events:ro
+
+    command: uv run --locked gunicorn --reload --bind 0.0.0.0:8000 services.events.app.wsgi:application

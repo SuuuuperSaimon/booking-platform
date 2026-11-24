@@ -7,6 +7,7 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "argon2-cffi>=23.1",
     "gunicorn>=26.2.0",
+    "yoyo-migrations==9.0.0",
 ]
 
 [dependency-groups]
@@ -20,7 +21,14 @@ dev = [
 package = false
 
 [tool.pytest.ini_options]
-addopts = "--import-mode=importlib"
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+addopts = [
+  "-vv",
+  "--import-mode=importlib"
+]
 
 [tool.ruff]
 line-length = 100
